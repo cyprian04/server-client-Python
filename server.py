@@ -1,13 +1,13 @@
 import socket
 
-PORT = 5100
+PORT = 5500
 HOST = socket.gethostbyname(socket.gethostname())
 ADDRESS = (HOST, PORT)
 
 print("[STARTING] server is starting...")
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket: # same as using in c#
-    server_socket.bind(HOST, PORT)
+    server_socket.bind(ADDRESS)
     server_socket.listen()
     user_conn, user_addr = server_socket.accept()
     with user_conn: # if socket(connection with client) is open
