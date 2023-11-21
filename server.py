@@ -18,7 +18,7 @@ sel.register(listening_socket, selectors.EVENT_READ, data=None) # sel.register()
 
 try:
     while True:
-        events = sel.select(timeout=None) # waiting for conns on registered listening_socket
+        events = sel.select(timeout=None) # waiting for: 1. new conns on listening_socket 2. already registerd sockets from already present clients
         for key, mask in events:
             if key.data is None:
                 #accept_wrapper(key.fileobj) #if new connection on listening socket
