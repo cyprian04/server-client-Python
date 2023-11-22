@@ -13,8 +13,8 @@ def accept_new_client(socket):
     user_conn, user_address = socket.accept() # accepts new connection and asign it to new socket representing conn with client
     print(f"[NEW CONNECTION] Accepted connection from {user_address}")   
     user_conn.setblocking(False)
-    data = types.SimpleNamespace(addr=user_address,inb=b"", outb=b"")
-    events = selectors.EVENT_READ | selectors.EVENT_WRITE
+    data = types.SimpleNamespace(addr=user_address,inb=b"", outb=b"") #  create an object to hold the data that you want included along with the socket
+    events = selectors.EVENT_READ | selectors.EVENT_WRITE # client connection is ready for reading and writing
     sel.register(user_conn, events, data=data) # registering client socket connection to be monitored
 
 def start():
