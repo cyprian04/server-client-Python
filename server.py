@@ -17,6 +17,19 @@ def accept_new_client(socket):
     events = selectors.EVENT_READ | selectors.EVENT_WRITE # client connection is ready for reading and writing
     sel.register(user_conn, events, data=data) # registering client socket connection to be monitored
 
+def handle_client(key, mask):
+    client_socket = key.fileobj
+    data = key.data
+    if mask & selectors.EVENT_READ:
+        recv_data = client_socket.recv(1024)  # Should be ready to read
+        if recv_data:
+            data.outb += recv_data
+        else:
+            print(f"Closing connection to {data.addr}") # if recv_data is empty close and unregister the client socket because client closed the conn
+            sel.unregister(client_socket)
+            client_socket.close()
+    
+
 def start():
     print("[STARTING] Server is starting...")
 
@@ -35,7 +48,7 @@ def start():
                     accept_new_client(key.fileobj) #if new connection on listening socket
                     pass
                 else:
-                    #service_connection(key, mask) # if client is already connected and send smth
+                    handle_client(key, mask) # if client is already connected and send smth
                     pass
     except KeyboardInterrupt:
         print("[ABORTED] Caught keyboard interrupt, exiting")
