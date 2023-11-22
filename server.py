@@ -25,10 +25,14 @@ def handle_client(key, mask):
         if recv_data:
             data.outb += recv_data
         else:
-            print(f"Closing connection to {data.addr}") # if recv_data is empty close and unregister the client socket because client closed the conn
+            print(f"[CLOSING] Closing connection to {data.addr}") # if recv_data is empty close and unregister the client socket because client closed the conn
             sel.unregister(client_socket)
             client_socket.close()
-    
+    if mask & selectors.EVENT_WRITE:
+        if data.outb:
+            print(f"[DATA] Echoing {data.outb!r} to {data.addr}")
+            sent = client_socket.send(data.outb)  # Echoing information bytes back to client
+            data.outb = data.outb[sent:] # clearing the data buffer for this client so it doesn't contain a message that we sent a moment ago
 
 def start():
     print("[STARTING] Server is starting...")
