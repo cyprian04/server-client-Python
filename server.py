@@ -9,6 +9,13 @@ HOST = socket.gethostbyname(socket.gethostname())
 PORT = 5500  # The port used by the server
 ADDRESS = (HOST, PORT)
 
+def accept_new_client(socket):
+    user_conn, user_address = socket.accept() # accepts new connection and asign it to new socket representing conn with client
+    print(f"[NEW CONNECTION] Accepted connection from {user_address}")   
+    user_conn.setblocking(False)
+    data = types.SimpleNamespace(addr=user_address,inb=b"", outb=b"")
+    events = selectors.EVENT_READ | selectors.EVENT_WRITE
+    sel.register(user_conn, events, data=data) # registering client socket connection to be monitored
 
 def start():
     print("[STARTING] Server is starting...")
@@ -25,13 +32,13 @@ def start():
             events = sel.select(timeout=None) # waiting for: 1. new conns on listening_socket 2. already registerd sockets from already present clients
             for key, mask in events:
                 if key.data is None:
-                    #accept_wrapper(key.fileobj) #if new connection on listening socket
+                    accept_new_client(key.fileobj) #if new connection on listening socket
                     pass
                 else:
                     #service_connection(key, mask) # if client is already connected and send smth
                     pass
     except KeyboardInterrupt:
-        print("Caught keyboard interrupt, exiting")
+        print("[ABORTED] Caught keyboard interrupt, exiting")
     finally:
         sel.close()
 
