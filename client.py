@@ -27,7 +27,7 @@ def main():
 
         try: # Check if there is input from the user
             message = sys.stdin.readline()
-        except KeyboardInterrupt:
+        except KeyboardInterrupt: # for CTRL + C
             print("Exiting the client.")
             sys.exit()
 

@@ -10,7 +10,7 @@ def handle_connections(server_socket):
     while True:# Wait for an activity on one of the sockets
         for key, events in selector.select(): # returns a list of active sockets
             if key.fileobj == server_socket:# Accept new connection
-                
+
                 client_socket, client_address = server_socket.accept()
                 print(f"[CONNECTION] New connection from host: {client_address}")
                 client_socket.send("[SERVER] Welcome to the server!\n Type 'exit' to disconnect.\n".encode())
@@ -23,16 +23,15 @@ def handle_connections(server_socket):
                     data = client_socket.recv(1024)
                     if data:
                         message = data.decode()
-                        print(f"Received message from {client_sockets[client_socket]}: {message}")
+                        print(f"[MESSAGE] Received message from {client_sockets[client_socket]}: {message}")
                         client_socket.send(data) # Echo the message back to the same client
                     else:
-                        print(f"Connection closed by {client_sockets[client_socket]}")
+                        print(f"[DISCONNECTED] Connection closed by {client_sockets[client_socket]}")
                         selector.unregister(client_socket)# Remove the disconnected client
                         del client_sockets[client_socket]
                 except:
                     continue
 
-# Main function to set up the server
 def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -41,7 +40,6 @@ def main():
     server_socket.bind(server_address)
     server_socket.listen()
     print("[LISTENING] Server is listening on {}:{}".format(*server_address))
-
     handle_connections(server_socket)
 
 if __name__ == "__main__":
