@@ -36,7 +36,8 @@ def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-    server_address = ('localhost', 8888)
+    HOST = socket.gethostbyname(socket.gethostname())
+    server_address = (HOST, 8888)
     server_socket.bind(server_address)
     server_socket.listen()
     print("[LISTENING] Server is listening on {}:{}".format(*server_address))

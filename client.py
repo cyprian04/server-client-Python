@@ -3,8 +3,10 @@ import sys
 import select
 
 def main():
+    host = input("Insert the server ip address: ")
+    port = int(input("Insert the server port: "))
+    server_address = (host,port)
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_address = ('localhost', 8888)
     client_socket.connect(server_address)
     print(f"[CONNECTION] Connected to Server: {server_address}")
     client_socket.setblocking(False)
