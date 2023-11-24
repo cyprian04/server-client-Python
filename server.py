@@ -24,14 +24,14 @@ def handle_connections(server_socket):
                     if data:
                         message = data.decode()
                         print(f"[MESSAGE] Received message from {client_sockets[client_socket]}: {message}")
-                        client_socket.send(data) # Echo the message back to the same client
+                        client_socket.send("[ECHO] from server: ".encode() +data) # Echo the message back to the same client
                     else:
                         print(f"[DISCONNECTED] Connection closed by {client_sockets[client_socket]}")
                         selector.unregister(client_socket)# Remove the disconnected client
-                        del client_sockets[client_socket]
+                        del client_sockets[client_socket]                    
                 except:
                     continue
-
+        
 def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
